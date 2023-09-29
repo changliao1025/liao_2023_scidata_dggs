@@ -23,27 +23,29 @@ class OOMFormatter(mpl.ticker.ScalarFormatter):
 
 
 # Open the images
-sDate = '20230701'
-nrow = 3
+sDate = '20230801'
+nrow = 2
 ncolumn = 2
 iCase_start = 10
-iCase_end = 14
+iCase_end = 13
 iFlag_colorbar = 1
 iFlag_scientific_notation_colorbar =0 
 
 #===========================
 #setup workspace path
 #===========================
-sPath_parent = str(Path(__file__).parents[3]) # data is located two dir's up
-sPath_data = realpath( sPath_parent +  '/data/susquehanna' )
+sPath_parent = str(Path(__file__).parents[2]) # data is located two dir's up
+sPath_data = realpath( sPath_parent +  '/data/amazon' )
 sWorkspace_input =  str(Path(sPath_data)  /  'input')
-sWorkspace_output = '/compyfs/liao313/04model/pyhexwatershed/susquehanna'
+sWorkspace_output = '/compyfs/liao313/04model/pyhexwatershed/amazon'
 
-sFilename_configuration_in = realpath( sPath_parent +  '/examples/susquehanna/pyhexwatershed_susquehanna_latlon.json' )
+sFilename_configuration_in = realpath( sPath_parent +  '/examples/amazon/pyhexwatershed_amazon_dggrid.json' )
 if os.path.isfile(sFilename_configuration_in):
     pass
 else:
     print('This configuration does not exist: ', sFilename_configuration_in )
+    exit()
+
 
 
 aImage = list()
@@ -64,7 +66,7 @@ for iCase in range(iCase_start, iCase_end + 1):
 # Create a figure and subplots
 
 
-fig, axs = plt.subplots(nrow, ncolumn+1, figsize=(14, 12), gridspec_kw={'width_ratios': [3,3,3,3,1]},dpi=300)
+fig, axs = plt.subplots(nrow, ncolumn+1, figsize=(16, 12), gridspec_kw={'width_ratios': [4,4,1]},dpi=300)
 plt.subplots_adjust(hspace=0.0, wspace=0.0, top=0.96)  # Adjust spacing here
 # Plot each image on a subplot
 
@@ -83,7 +85,7 @@ for irow in range(1, nrow+1):
     ax_dummy = axs[irow-1, ncolumn]
     ax_dummy.axis('off')
       
-# Add a common title above the subplots
+#Add a common title above the subplots
 #anchored_text = AnchoredText("Surface elevation", loc='upper center', frameon=False, prop=dict(fontsize=16))
 
 fig.suptitle("Surface elevation", fontsize=16)
@@ -91,7 +93,7 @@ fig.suptitle("Surface elevation", fontsize=16)
 
 #add an additional colorbar
 dValue_min=0
-dValue_max=800
+dValue_max=5000
 sColormap = 'terrain'
 sExtend =  'max'
 sUnit='Unit: m'
@@ -117,7 +119,7 @@ if iFlag_colorbar ==1:
     cb.ax.tick_params(labelsize=14)
 
 # Save the merged image with titles
-sFilename_out = '/qfs/people/liao313/workspace/python/liao-etal_2022_hexwatershed_james/code/python/visual/surface_elevation_comparison.png'
+sFilename_out = '/qfs/people/liao313/workspace/python/liao_2023_scidata_dggs/figures/surface_elevation_comparison.png'
 #plt.show()
 plt.savefig(sFilename_out,  bbox_inches='tight')
 
