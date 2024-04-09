@@ -44,9 +44,9 @@ dLatitude_outlet_degree= 63.04269
 iMesh_type = 5
 
 #set up dggrid resolution level 
-aResolution_index = [10, 11, 12, 13]
+aResolution_index = [10, 11, 12, 13, 14]
 nCase = len(aResolution_index)
-aCase_index = [10, 11, 12, 13] #aResolution_index
+aCase_index = [10, 11, 12, 13, 14] #aResolution_index
 sDggrid_type = 'ISEA3H'
 #generate a bash job script
 if iFlag_create_job ==1:
@@ -74,7 +74,7 @@ aExtent = [-60.6,-59.2  ,-3.6, -2.5]
 aExtent = None
 
 sFilename_basins_in= '/qfs/people/liao313/workspace/python/liao_2023_scidata_dggs/data/yukon/input/pyflowline_yukon_basins.json'
-for iCase in range(0, 4, 1):    
+for iCase in range(4, 5, 1):    
     iResolution_index = aResolution_index[iCase]
     sResolution = "{:0d}".format(iResolution_index)
     iCase_index = aCase_index[iCase]
@@ -123,7 +123,7 @@ for iCase in range(0, 4, 1):
         sLine  = 'sbatch submit.job' + '\n'
         ofs.write(sLine)
     else:
-        #oPyhexwatershed.export() #for testing  
+        #oPyhexwatershed.pyhexwatershed_export() #for testing  
         pass
 
     if iFlag_visualization == 1:
@@ -156,7 +156,6 @@ for iCase in range(0, 4, 1):
         #oPyhexwatershed.plot( sVariable_in = 'flow_direction_with_mesh', sFilename_output_in = sFilename)  
 
         sFilename = os.path.join( sWorkspace_output_basin, 'flow_direction_w_observation.png' )
-        #sFilename = None
         oPyhexwatershed.plot( sVariable_in = 'flow_direction_with_observation',  sFilename_output_in = sFilename,
                              iFont_size_in= 14,iFlag_title_in=1, 
                              iFlag_openstreetmap_in=0,

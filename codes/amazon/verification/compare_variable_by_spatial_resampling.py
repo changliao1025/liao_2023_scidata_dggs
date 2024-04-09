@@ -4,14 +4,14 @@ from pathlib import Path
 from os.path import realpath
 import matplotlib as mpl
 #import gdal
-from osgeo import gdal, ogr, osr, gdalconst
+from osgeo import gdal, ogr, osr
 from pyearth.visual.color.create_diverge_rgb_color_hex import create_diverge_rgb_color_hex
 from pyflowline.formats.convert_coordinates import convert_gcs_coordinates_to_cell
 from pyflowline.formats.convert_coordinates import convert_gcs_coordinates_to_flowline
-from pyflowline.external.pyearth.gis.gdal.gdal_functions import get_geometry_coords
+from pyearth.gis.location.get_geometry_coordinates import get_geometry_coords
 from pyflowline.external.tinyr.tinyr.tinyr import RTree
 from pyhexwatershed.pyhexwatershed_read_model_configuration_file import pyhexwatershed_read_model_configuration_file
-from pyflowline.external.pyearth.gis.gdal.gdal_functions import gdal_read_geotiff_file, reproject_coordinates, reproject_coordinates_batch
+from pyearth.gis.gdal.read.raster.gdal_read_geotiff_file import gdal_read_geotiff_file
 from pyearth.visual.scatter.scatter_plot_multiple_data import scatter_plot_multiple_data
 #read the level 14 dggrid file
 
@@ -80,9 +80,9 @@ for j in range(iNumber):
 
 
 sPath_parent = str(Path(__file__).parents[2]) # data is located two dir's up
-sPath_data = realpath( sPath_parent +  '/data/susquehanna' )
+sPath_data = realpath( sPath_parent +  '/data/amazon' )
 sWorkspace_input =  str(Path(sPath_data)  /  'input')
-sWorkspace_output = '/compyfs/liao313/04model/pyhexwatershed/susquehanna'
+sWorkspace_output = '/compyfs/liao313/04model/pyhexwatershed/amazon'
 
 sFilename_configuration_in = realpath( sPath_parent +  '/examples/amazon/pyhexwatershed_amazon_dggrid.json' )
 
@@ -100,6 +100,7 @@ iFlag_elevation_profile = 0
 sMesh_type='dggrid'
 sDggrid_type = 'ISEA3H'
 sDate= '20230801'
+sDate= '20240101'
 for iCase in range(0, 4, 1):   
     iResolution_index = aResolution_index[iCase]
     iCase_index = aCase_index[iCase]  
@@ -157,7 +158,6 @@ for iCase in range(0, 4, 1):
     
     aDatax0 = np.asarray(aVariable_obs)
     aDatay0 = np.asarray(aVariable_sample)
-
 
     aData_x.append(aDatax0)
     aData_y.append(aDatay0)

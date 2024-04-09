@@ -7,10 +7,10 @@ from osgeo import  ogr
 import matplotlib as mpl
 
 from pyearth.visual.scatter.scatter_plot_multiple_data import scatter_plot_multiple_data
-from pyflowline.external.pyearth.gis.gdal.gdal_functions  import  degree_to_meter
+from pyearth.gis.spatialref.conversion_between_degree_and_meter  import  degree_to_meter
 from pyearth.visual.color.create_diverge_rgb_color_hex import create_diverge_rgb_color_hex
 
-sPath_parent = str(Path(__file__).parents[2]) # data is located two dir's up
+sPath_parent = str(Path(__file__).parents[3]) # data is located two dir's up
 print(sPath_parent)
 sPath_data = realpath( sPath_parent +  '/data/amazon' )
 sWorkspace_input =  str(Path(sPath_data)  /  'input')
@@ -47,7 +47,7 @@ aData_x=list()
 aData_y  =list()
 aLabel_legend =list()
 nPoint = 7
-dResolution_degree_in= 0.005
+dResolution_degree_in= 0.005 #0.00833333 
 dLatitude_mean = np.mean(aLatitude)
 dResolution_flow_accumulation = degree_to_meter( dLatitude_mean ,dResolution_degree_in)
 
@@ -62,7 +62,7 @@ aDrainage_area[3,:] = [ 5844697088000,   63871963136,   33154451456, 48728188518
 
 aDrainage_area = aDrainage_area / 1.0E6
 
-sFilename_out = sPath_parent + '/' + 'figures' + '/' + 'scatterplot_drainage_area_multiple.png'
+sFilename_out = sPath_parent + '/' + 'figures' + '/' + 'amazon'+ '/'+ 'scatterplot_drainage_area_multiple.png'
 
 #5 cases + 1 obs
 
@@ -115,8 +115,8 @@ scatter_plot_multiple_data(aData_x,
                       dSpace_y_in = None, 
                       sFormat_x_in =None,
                       sFormat_y_in =None,
-                      sLabel_x_in ='LBA-ECO data, $km^{2}$',
-                      sLabel_y_in = 'HexWatershed, $km^{2}$)' , 
+                      sLabel_x_in ='LBA-ECO data, $\mathrm{km}^{2}$',
+                      sLabel_y_in = 'HexWatershed, $\mathrm{km}^{2}$' , 
                       aLabel_point_in = aLabel_point,
                       aColor_in=aColor,
                       aMarker_in=aMarker,

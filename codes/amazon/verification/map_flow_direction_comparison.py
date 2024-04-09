@@ -23,7 +23,7 @@ class OOMFormatter(mpl.ticker.ScalarFormatter):
 
 
 # Open the images
-sDate = '20230801'
+sDate = '20240101'
 nrow = 2
 ncolumn = 2
 iCase_start = 10
@@ -34,12 +34,12 @@ iFlag_scientific_notation_colorbar =0
 #===========================
 #setup workspace path
 #===========================
-sPath_parent = str(Path(__file__).parents[2]) # data is located two dir's up
+sPath_parent = str(Path(__file__).parents[3]) # data is located two dir's up
 sPath_data = realpath( sPath_parent +  '/data/amazon' )
 sWorkspace_input =  str(Path(sPath_data)  /  'input')
 sWorkspace_output = '/compyfs/liao313/04model/pyhexwatershed/amazon'
 
-sFilename_configuration_in = realpath( sPath_parent +  '/examples/amazon/pyhexwatershed_amazon_dggrid.json' )
+sFilename_configuration_in = realpath( sPath_parent +  '/data/amazon/input/pyhexwatershed_amazon_dggrid.json' )
 if os.path.isfile(sFilename_configuration_in):
     pass
 else:
@@ -85,14 +85,10 @@ for irow in range(1, nrow+1):
 # Add a common title above the subplots
 #anchored_text = AnchoredText("Surface elevation", loc='upper center', frameon=False, prop=dict(fontsize=16))
 
-
-
-
-
 # Save the merged image with titles
 
 fig.suptitle("Flow direction with observation", fontsize=16)
-sFilename_out = '/qfs/people/liao313/workspace/python/liao_2023_scidata_dggs/figures/flow_direction_comparison_manaus.png'
+sFilename_out = '/qfs/people/liao313/workspace/python/liao_2023_scidata_dggs/figures/amazon/flow_direction_comparison_manaus.png'
 #plt.show()
 plt.savefig(sFilename_out,  bbox_inches='tight')
 
