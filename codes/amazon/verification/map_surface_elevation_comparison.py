@@ -7,7 +7,7 @@ from matplotlib.offsetbox import AnchoredText
 import matplotlib.cm as cm
 from PIL import Image
 
-from pyhexwatershed.pyhexwatershed_read_model_configuration_file import pyhexwatershed_read_model_configuration_file
+from pyhexwatershed.configuration.read_configuration_file import pyhexwatershed_read_configuration_file
 plt.rcParams["font.family"] = "Times New Roman"
 plt.rcParams["mathtext.fontset"] = 'dejavuserif'
 class OOMFormatter(mpl.ticker.ScalarFormatter):
@@ -30,7 +30,7 @@ ncolumn = 2
 iCase_start = 10
 iCase_end = 13
 iFlag_colorbar = 1
-iFlag_scientific_notation_colorbar =0 
+iFlag_scientific_notation_colorbar =0
 
 #===========================
 #setup workspace path
@@ -52,13 +52,13 @@ else:
 aImage = list()
 for iCase in range(iCase_start, iCase_end + 1):
     iCase_index = iCase
-    oPyhexwatershed = pyhexwatershed_read_model_configuration_file(sFilename_configuration_in,
+    oPyhexwatershed = pyhexwatershed_read_configuration_file(sFilename_configuration_in,
             iCase_index_in=iCase_index,
-                sDate_in= sDate)   
+                sDate_in= sDate)
     pBasin_hexwatershed = oPyhexwatershed.aBasin[0]
     sWorkspace_output_basin = pBasin_hexwatershed.sWorkspace_output_basin
     print(sWorkspace_output_basin)
-    sFilename = os.path.join(  sWorkspace_output_basin, 'surface_elevation.png' ) 
+    sFilename = os.path.join(  sWorkspace_output_basin, 'surface_elevation.png' )
 
     image_dummy = Image.open(sFilename)
     aImage.append(image_dummy)
@@ -73,7 +73,7 @@ plt.subplots_adjust(hspace=0.0, wspace=0.0, top=0.96)  # Adjust spacing here
 
 for irow in range(1, nrow+1):
     for icolumn in range(1, ncolumn+1):
-        
+
         iCase_index = (irow-1)*ncolumn + icolumn
         ax_dummy = axs[irow-1, icolumn-1]
 
@@ -85,7 +85,7 @@ for irow in range(1, nrow+1):
 for irow in range(1, nrow+1):
     ax_dummy = axs[irow-1, ncolumn]
     ax_dummy.axis('off')
-      
+
 #Add a common title above the subplots
 #anchored_text = AnchoredText("Surface elevation", loc='upper center', frameon=False, prop=dict(fontsize=16))
 
@@ -98,19 +98,19 @@ dValue_max=5000
 sColormap = 'terrain'
 sExtend =  'max'
 sUnit='Unit: m'
-cmap = cm.get_cmap(sColormap)
+cmap = plt.colormaps[sColormap]
 if iFlag_colorbar ==1:
     fig.canvas.draw()
-    #get the position of the 
-    # Section 2 
-    ax_pos0 = axs[0,0].get_position() 
-    ax_pos1 = axs[0,1].get_position() 
-    ax_pos2 = axs[1,0].get_position() 
-    ax_pos3 = axs[1,1].get_position() 
+    #get the position of the
+    # Section 2
+    ax_pos0 = axs[0,0].get_position()
+    ax_pos1 = axs[0,1].get_position()
+    ax_pos2 = axs[1,0].get_position()
+    ax_pos3 = axs[1,1].get_position()
     #use this ax to set the colorbar ax position
-    #calculat the heigh 
+    #calculat the heigh
     dHeight = ax_pos3.height * 2 + ax_pos0.y0 - ax_pos2.y1
-    ax_cb = fig.add_axes([ax_pos3.x1+0.02, ax_pos3.y0, 0.02, dHeight])   
+    ax_cb = fig.add_axes([ax_pos3.x1+0.02, ax_pos3.y0, 0.02, dHeight])
 
     #ax_cb= fig.add_axes([0.86, 0.1, 0.02, 0.85])
     if iFlag_scientific_notation_colorbar==1:
