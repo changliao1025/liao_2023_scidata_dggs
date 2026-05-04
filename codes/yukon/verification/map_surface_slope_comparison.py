@@ -94,7 +94,7 @@ fig.suptitle("Surface slope", fontsize=16)
 #add an additional colorbar
 dValue_min=0
 dValue_max=0.1
-sColormap = 'Spectral_r'
+sColormap = 'terrain'
 sExtend =  'max'
 sUnit='Unit: ratio'
 cmap = plt.colormaps[sColormap]

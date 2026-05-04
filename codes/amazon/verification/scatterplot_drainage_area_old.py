@@ -27,22 +27,22 @@ sDate='20230801'
 sMesh_type = 'dggrid'
 sFilename_configuration_in = realpath( sPath_parent +  '/examples/amazon/pyhexwatershed_amazon_dggrid.json' )
 
-   
+
 # we define a dictionnary with months that we'll use later
 case_dict = dict()
 
 for i in range(1, nCase +1):
-    case_dict[i] = 'Case ' +  "{:0d}".format(i) 
+    case_dict[i] = 'Case ' +  "{:0d}".format(i)
 
-print(case_dict)   
+print(case_dict)
 
 aDistance_niws =list()
 aData_x=list()
 aData_y  =list()
 aLabel_legend =list()
 
-#read the point location using gdal 
-pSrs = osr.SpatialReference()  
+#read the point location using gdal
+pSrs = osr.SpatialReference()
 pSrs.ImportFromEPSG(4326)    # WGS84 lat/lon
 sFilename_confluence = '/qfs/people/liao313/data/hexwatershed/amazon/vector/amztrbmth.geojson'
 pDriver = ogr.GetDriverByName('GeoJSON')
@@ -71,7 +71,7 @@ aFlow_accumulation_in, dPixelWidth, dOriginX, dOriginY, \
 
 dResolution_degree_in= 0.005
 dLatitude_mean = np.mean(aLatitude)
-dResolution_flow_accumulation = degree_to_meter( dLatitude_mean ,dResolution_degree_in)
+dResolution_flow_accumulation = degree_to_meter( dResolution_degree_in ,dLatitude_mean)
 
 dX_left=dOriginX
 dX_right = dOriginX + ncolumn * dPixelWidth
@@ -81,32 +81,32 @@ aFlow_accumulation = np.full(nPoint, None, dtype=float)
 for i in range(nPoint):
     x1 = aLongitude[i]
     y1 = aLatitude[i]
-    dX_out,dY_out = reproject_coordinates(x1,y1, pSrs,pSpatialRef_target)   
+    dX_out,dY_out = reproject_coordinates(x1,y1, pSrs,pSpatialRef_target)
     dDummy1 = (dX_out - dX_left) / dPixelWidth
     lColumn_index = int(dDummy1)
     dDummy2 = (dY_top - dY_out) / dPixelWidth
     lRow_index = int(dDummy2)
     if lColumn_index >= ncolumn or lColumn_index < 0 \
-        or lRow_index >= nrow or lRow_index < 0:        
-        #this pixel is out of bound            
+        or lRow_index >= nrow or lRow_index < 0:
+        #this pixel is out of bound
         continue
-    else:         
-        dFlow_accumulation = aFlow_accumulation_in[lRow_index, lColumn_index]     
+    else:
+        dFlow_accumulation = aFlow_accumulation_in[lRow_index, lColumn_index]
         aFlow_accumulation[i] = dFlow_accumulation * dResolution_flow_accumulation * dResolution_flow_accumulation / 1.0E6
-       
-#read the model resolution 
+
+#read the model resolution
 sDggrid_type = 'ISEA3H'
 aDrainage_area = np.full(( nCase,nPoint), None, dtype=float)
 for iCase in range(0, nCase ):
-    #read 
-    iCase_index = aCase_index[iCase]  
+    #read
+    iCase_index = aCase_index[iCase]
     iResolution_index = aResolution_index[iCase]
     dResolution = dggrid_find_resolution_by_index(sDggrid_type, iResolution_index)
-    print(dResolution)     
+    print(dResolution)
 
     oPyhexwatershed = pyhexwatershed_read_model_configuration_file(sFilename_configuration_in,
                     iCase_index_in=iCase_index,
-                    sDate_in= sDate, sMesh_type_in= sMesh_type)  
+                    sDate_in= sDate, sMesh_type_in= sMesh_type)
 
     #read the variable polygon
     sFilename_polygon = oPyhexwatershed.aBasin[0].sFilename_variable_polygon
@@ -116,29 +116,29 @@ for iCase in range(0, nCase ):
     index_base = rtree.index.Index()
 
     for i in range(nFeature_base):
-        lID = i 
+        lID = i
         pFeature_base = pLayer_base.GetFeature(i)
-        pGeometry_base = pFeature_base.GetGeometryRef()    
-        left, right, bottom, top= pGeometry_base.GetEnvelope()   
+        pGeometry_base = pFeature_base.GetGeometryRef()
+        left, right, bottom, top= pGeometry_base.GetEnvelope()
         pBound= (left, bottom, right, top)
         index_base.insert(lID, pBound)  #
-        
+
     #find the confluence point
-    for i in range(nPoint):       
+    for i in range(nPoint):
         #convert meter to degree
         dLatitude_mean=     aLatitude[i]
-        dResolution_degree = meter_to_degree(dResolution, dLatitude_mean) * 2
-        pBound= (aLongitude[i] - dResolution_degree, 
-                 aLatitude[i] - dResolution_degree, 
-                 aLongitude[i] + dResolution_degree, 
+        dResolution_degree = meter_to_degree(dResolution, dLatitude_mean  ) * 2
+        pBound= (aLongitude[i] - dResolution_degree,
+                 aLatitude[i] - dResolution_degree,
+                 aLongitude[i] + dResolution_degree,
                  aLatitude[i] + dResolution_degree)
         aIntersect = list(index_base.intersection(pBound))
         aDummy = list()
         for k in aIntersect:
-            pFeature_base = pLayer_base.GetFeature(k)            
+            pFeature_base = pLayer_base.GetFeature(k)
             dDrainage_base = pFeature_base.GetField("drainage_area")
             aDummy.append(dDrainage_base/ 1.0E6)
-        
+
         #find the closese to the observation
         dFlow_accumulation = aFlow_accumulation[i]
         #calculate the difference
@@ -146,8 +146,8 @@ for iCase in range(0, nCase ):
         aDummy0 = np.abs(aDummy - dFlow_accumulation)
         #find th minimum and its index
         iIndex = np.argmin(aDummy0)
-        aDrainage_area[iCase, i] = aDummy[iIndex] 
-    
+        aDrainage_area[iCase, i] = aDummy[iIndex]
+
     #close the file
     pDataSource = None
 
@@ -164,45 +164,45 @@ nmesh=nCase
 aColor= create_diverge_rgb_color_hex(nmesh)
 aMarker = [ '.','o','+','x','^']
 
-aFlow_accumulation = np.array(aFlow_accumulation) 
+aFlow_accumulation = np.array(aFlow_accumulation)
 aData_x = list()
 aData_y = list()
 
 for i in range(nCase):
-    iCase_index = aCase_index[i]  
+    iCase_index = aCase_index[i]
     aLabel_legend.append(   'ISEA3H Level ' +  "{:0d}".format(iCase_index)   )
     aDatax0 = list()
     aDatay0 = list()
     for j in range(nPoint):
         aDatax0.append(aFlow_accumulation[j])
         aDatay0.append(aDrainage_area[i,j])
-    
+
     aDatax0 = np.asarray(aDatax0)
     aDatay0 = np.asarray(aDatay0)
     aData_x.append(aDatax0)
     aData_y.append(aDatay0)
 
 
-scatter_plot_multiple_data(aData_x, 
+scatter_plot_multiple_data(aData_x,
                       aData_y,
-                      sFilename_out,  
+                      sFilename_out,
                       iFlag_scientific_notation_x_in=1,
                       iFlag_scientific_notation_y_in=1,
-                      iSize_x_in = None, 
-                      iSize_y_in = None,  
+                      iSize_x_in = None,
+                      iSize_y_in = None,
                       iDPI_in = None ,
                       iFlag_log_x_in = None,
                       iFlag_log_y_in = None,
-                      dMin_x_in = 0, 
-                      dMax_x_in = np.max(aFlow_accumulation), 
-                      dMin_y_in = 0, 
-                      dMax_y_in = np.max(aFlow_accumulation), 
-                      dSpace_x_in = None, 
-                      dSpace_y_in = None, 
+                      dMin_x_in = 0,
+                      dMax_x_in = np.max(aFlow_accumulation),
+                      dMin_y_in = 0,
+                      dMax_y_in = np.max(aFlow_accumulation),
+                      dSpace_x_in = None,
+                      dSpace_y_in = None,
                       sFormat_x_in =None,
                       sFormat_y_in =None,
                       sLabel_x_in ='LBA-ECO data, $km^{2}$',
-                      sLabel_y_in = 'HexWatershed, $km^{2}$)' , 
+                      sLabel_y_in = 'HexWatershed, $km^{2}$)' ,
                       aColor_in=aColor,
                       aMarker_in=aMarker,
                       aSize_in = aSize,

@@ -24,6 +24,7 @@ class OOMFormatter(mpl.ticker.ScalarFormatter):
 
 # Open the images
 sDate = '20240101'
+sDate = '20240701'
 nrow = 2
 ncolumn = 2
 iCase_start = 10
@@ -46,7 +47,7 @@ else:
     print('This configuration does not exist: ', sFilename_configuration_in )
     exit()
 
-sFilename_png = 'flow_direction_w_observation_manaus.png'
+sFilename_png = 'flow_direction_w_observation_manaus.png' #_manaus
 
 aImage = list()
 for iCase in range(iCase_start, iCase_end + 1):

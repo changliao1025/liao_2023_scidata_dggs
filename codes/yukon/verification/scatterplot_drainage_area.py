@@ -7,7 +7,7 @@ from osgeo import  ogr
 import matplotlib as mpl
 
 from pyearth.visual.scatter.scatter_plot_multiple_data import scatter_plot_multiple_data
-from pyearth.gis.spatialref.conversion_between_degree_and_meter  import  degree_to_meter
+from pyearth.gis.spatialref.convert_between_degree_and_meter  import  degree_to_meter
 from pyearth.visual.color.create_diverge_rgb_color_hex import create_diverge_rgb_color_hex
 
 sPath_parent = str(Path(__file__).parents[3]) # data is located two dir's up
@@ -30,7 +30,7 @@ aLabel_legend =list()
 nPoint = 6
 dResolution_degree_in= 0.004166666666666670078
 dLatitude_mean = 65.0
-dResolution_flow_accumulation = degree_to_meter( dLatitude_mean ,dResolution_degree_in)
+dResolution_flow_accumulation = degree_to_meter( dResolution_degree_in ,dLatitude_mean)
 
 
 #In Canada, four principal tributaries feed the Yukon River: the Teslin River, the Pelly River, the White River and the Stewart River. In Alaska, the major tributaries are the Porcupine, Tanana and Koyukuk rivers.
@@ -62,19 +62,19 @@ nmesh=nCase
 aColor= create_diverge_rgb_color_hex(nmesh)
 aMarker = [ '.','o','+','x','^']
 
-aFlow_accumulation = np.array(aFlow_accumulation) 
+aFlow_accumulation = np.array(aFlow_accumulation)
 aData_x = list()
 aData_y = list()
 
 for i in range(nCase):
-    iCase_index = aCase_index[i]  
+    iCase_index = aCase_index[i]
     aLabel_legend.append(   'ISEA3H Level ' +  "{:0d}".format(iCase_index)   )
     aDatax0 = list()
     aDatay0 = list()
     for j in range(nPoint):
         aDatax0.append(aFlow_accumulation[j])
         aDatay0.append(aDrainage_area[i,j])
-    
+
     aDatax0 = np.asarray(aDatax0)
     aDatay0 = np.asarray(aDatay0)
 
@@ -85,26 +85,26 @@ for i in range(nCase):
     aData_y.append(aDatay0)
 
 
-scatter_plot_multiple_data(aData_x, 
+scatter_plot_multiple_data(aData_x,
                       aData_y,
-                      sFilename_out,  
+                      sFilename_out,
                       iFlag_scientific_notation_x_in=1,
                       iFlag_scientific_notation_y_in=1,
-                      iSize_x_in = None, 
-                      iSize_y_in = None,  
+                      iSize_x_in = None,
+                      iSize_y_in = None,
                       iDPI_in = None ,
                       iFlag_log_x_in = 1,
                       iFlag_log_y_in = 1,
-                      dMin_x_in = 4, 
-                      dMax_x_in = 6, 
-                      dMin_y_in = 4, 
-                      dMax_y_in = 6, 
-                      dSpace_x_in = None, 
-                      dSpace_y_in = None, 
+                      dMin_x_in = 4,
+                      dMax_x_in = 6,
+                      dMin_y_in = 4,
+                      dMax_y_in = 6,
+                      dSpace_x_in = None,
+                      dSpace_y_in = None,
                       sFormat_x_in =None,
                       sFormat_y_in =None,
                       sLabel_x_in ='HydroSHEDS data, $\mathrm{km}^{2}$',
-                      sLabel_y_in = 'HexWatershed, $\mathrm{km}^{2}$' , 
+                      sLabel_y_in = 'HexWatershed, $\mathrm{km}^{2}$' ,
                       aLabel_point_in = aLabel_point,
                       aColor_in=aColor,
                       aMarker_in=aMarker,

@@ -24,6 +24,7 @@ class OOMFormatter(mpl.ticker.ScalarFormatter):
 
 # Open the images
 sDate = '20240101'
+sDate = '20240701'
 nrow = 2
 ncolumn = 2
 iCase_start = 10
@@ -94,7 +95,7 @@ fig.suptitle("Surface slope", fontsize=16)
 #add an additional colorbar
 dValue_min=0
 dValue_max=0.1
-sColormap = 'Spectral_r'
+sColormap = 'terrain'
 sExtend =  'max'
 sUnit='Unit: ratio'
 cmap = plt.colormaps[sColormap]
